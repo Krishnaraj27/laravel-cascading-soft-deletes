@@ -1,0 +1,30 @@
+{
+    "name": "krishnaraj/laravel-cascading-soft-deletes",
+    "description": "Automatically cascade both soft deletes and restores to nested relationships in Laravel.",
+    "type": "library",
+    "require": {
+        "php": "^8.2",
+        "illuminate/database": "^11.0|^12.0",
+        "illuminate/support": "^11.0|^12.0"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Krishnaraj\\LaravelCascadingSoftDeletes\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Krishnaraj",
+            "email": "gkrishnaraj2002@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Krishnaraj\\LaravelCascadingSoftDeletes\\CascadingSoftDeletesServiceProvider"
+            ]
+        }
+    }
+}

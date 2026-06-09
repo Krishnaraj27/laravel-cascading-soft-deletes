@@ -13,6 +13,11 @@
             "Krishnaraj\\LaravelCascadingSoftDeletes\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Krishnaraj\\LaravelCascadingSoftDeletes\\Tests\\": "tests/"
+        }
+    },
     "authors": [
         {
             "name": "Krishnaraj",
@@ -26,5 +31,9 @@
                 "Krishnaraj\\LaravelCascadingSoftDeletes\\CascadingSoftDeletesServiceProvider"
             ]
         }
+    },
+    "require-dev": {
+        "orchestra/testbench": "^10.0",
+        "phpunit/phpunit": "^11.0"
     }
 }

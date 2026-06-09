@@ -1,2 +1,7 @@
 vendor/
 composer.lock
+# Added by code-review-graph
+.code-review-graph/
+.gemini/
+GEMINI.md
+.phpunit.result.cache

@@ -12,13 +12,18 @@ class Post extends Model
 {
     use SoftDeletes, CascadesSoftDeletes;
 
-    protected $fillable = ['title', 'user_id'];
+    protected $fillable = ['title', 'user_id', 'team_id'];
 
     protected $cascadeRelationships = ['comments'];
 
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function team(): BelongsTo
+    {
+        return $this->belongsTo(Team::class);
     }
 
     public function comments(): HasMany

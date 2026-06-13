@@ -3,6 +3,20 @@
 return [
     /*
     |--------------------------------------------------------------------------
+    | Cascade Deletions Table Name
+    |--------------------------------------------------------------------------
+    |
+    | The name of the database table used to track cascade deletion records.
+    | This table stores the parent-child relationship log so that the package
+    | can accurately determine which children to restore when a parent is
+    | restored, avoiding unintended restorations of independently deleted
+    | records or records still held by other soft-deleted parents.
+    |
+    */
+    'table_name' => 'cascade_deletions',
+
+    /*
+    |--------------------------------------------------------------------------
     | Maximum Nesting Level
     |--------------------------------------------------------------------------
     |
@@ -48,4 +62,30 @@ return [
     |
     */
     'rollback_on_error' => true,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Cascade Restores
+    |--------------------------------------------------------------------------
+    |
+    | When set to true, restoring a parent model will automatically restore
+    | any child models that were cascade-deleted with it. When set to false,
+    | child models will remain soft-deleted.
+    |
+    */
+    'cascade_on_restore' => true,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Detaching BelongsToMany Relationships
+    |--------------------------------------------------------------------------
+    |
+    | When set to true, deleting a parent model will automatically detach
+    | its BelongsToMany (many-to-many) pivot relationships.
+    | Note: This only detaches the pivot records during deletion; the pivot
+    | records are NOT re-attached when the parent is restored.
+    |
+    */
+    'detach_belongs_to_many' => true,
 ];
+

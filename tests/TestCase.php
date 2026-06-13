@@ -42,9 +42,17 @@ abstract class TestCase extends OrchestraTestCase
             $table->timestamps();
         });
 
+        Schema::create('teams', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->softDeletes();
+            $table->timestamps();
+        });
+
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id');
+            $table->foreignId('user_id')->nullable();
+            $table->foreignId('team_id')->nullable();
             $table->string('title');
             $table->softDeletes();
             $table->timestamps();
@@ -75,6 +83,32 @@ abstract class TestCase extends OrchestraTestCase
         Schema::create('role_user', function (Blueprint $table) {
             $table->foreignId('role_id');
             $table->foreignId('user_id');
+        });
+
+        Schema::create('companies', function (Blueprint $table) {
+            $table->string('id')->primary();
+            $table->string('name');
+            $table->softDeletes();
+            $table->timestamps();
+        });
+
+        Schema::create('employees', function (Blueprint $table) {
+            $table->string('id')->primary();
+            $table->string('company_id');
+            $table->string('name');
+            $table->softDeletes();
+            $table->timestamps();
+        });
+
+        Schema::create('cascade_deletions', function (Blueprint $table) {
+            $table->id();
+            $table->string('parent_type');
+            $table->string('parent_id');
+            $table->string('child_type');
+            $table->string('child_id');
+            $table->timestamp('created_at')->nullable();
+            $table->index(['parent_type', 'parent_id'], 'cascade_del_parent_idx');
+            $table->index(['child_type', 'child_id'], 'cascade_del_child_idx');
         });
     }
 }

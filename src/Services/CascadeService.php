@@ -310,9 +310,9 @@ class CascadeService
     {
         DB::table($this->getTrackingTable())->insert([
             'parent_type' => get_class($parent),
-            'parent_id' => $parent->getKey(),
+            'parent_id' => (string) $parent->getKey(),
             'child_type' => get_class($child),
-            'child_id' => $child->getKey(),
+            'child_id' => (string) $child->getKey(),
             'created_at' => now(),
         ]);
     }
@@ -332,9 +332,9 @@ class CascadeService
     {
         DB::table($this->getTrackingTable())
             ->where('parent_type', get_class($parent))
-            ->where('parent_id', $parent->getKey())
+            ->where('parent_id', (string) $parent->getKey())
             ->where('child_type', get_class($child))
-            ->where('child_id', $child->getKey())
+            ->where('child_id', (string) $child->getKey())
             ->delete();
     }
 
@@ -352,7 +352,7 @@ class CascadeService
     {
         return DB::table($this->getTrackingTable())
             ->where('child_type', get_class($child))
-            ->where('child_id', $child->getKey())
+            ->where('child_id', (string) $child->getKey())
             ->exists();
     }
 
@@ -365,12 +365,20 @@ class CascadeService
      */
     protected function getTrackedChildIds(Model $parent, string $childType): array
     {
-        return DB::table($this->getTrackingTable())
+        $ids = DB::table($this->getTrackingTable())
             ->where('parent_type', get_class($parent))
-            ->where('parent_id', $parent->getKey())
+            ->where('parent_id', (string) $parent->getKey())
             ->where('child_type', $childType)
             ->pluck('child_id')
             ->toArray();
+
+        // Convert the string child_ids back to integers if the child model uses integer keys
+        $childInstance = new $childType;
+        if ($childInstance->getKeyType() === 'int') {
+            return array_map('intval', $ids);
+        }
+
+        return $ids;
     }
 
     /**
@@ -387,7 +395,7 @@ class CascadeService
     {
         DB::table($this->getTrackingTable())
             ->where('child_type', get_class($child))
-            ->where('child_id', $child->getKey())
+            ->where('child_id', (string) $child->getKey())
             ->delete();
     }
 
@@ -405,7 +413,7 @@ class CascadeService
     {
         DB::table($this->getTrackingTable())
             ->where('parent_type', get_class($parent))
-            ->where('parent_id', $parent->getKey())
+            ->where('parent_id', (string) $parent->getKey())
             ->delete();
     }
 
@@ -423,11 +431,14 @@ class CascadeService
      */
     protected function removeStaleTrackingRecords(Model $parent, string $childType, array $childIds): void
     {
+        // Convert integer child IDs to strings to align with database table type (varchar)
+        $stringChildIds = array_map('strval', $childIds);
+
         DB::table($this->getTrackingTable())
             ->where('parent_type', get_class($parent))
-            ->where('parent_id', $parent->getKey())
+            ->where('parent_id', (string) $parent->getKey())
             ->where('child_type', $childType)
-            ->whereIn('child_id', $childIds)
+            ->whereIn('child_id', $stringChildIds)
             ->delete();
     }
 

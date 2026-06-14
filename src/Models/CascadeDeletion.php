@@ -106,7 +106,7 @@ class CascadeDeletion extends Model
     {
         return $query
             ->where('parent_type', $parent->getMorphClass())
-            ->where('parent_id', $parent->getKey());
+            ->where('parent_id', (string) $parent->getKey());
     }
 
     /**
@@ -126,6 +126,6 @@ class CascadeDeletion extends Model
     {
         return $query
             ->where('child_type', $child->getMorphClass())
-            ->where('child_id', $child->getKey());
+            ->where('child_id', (string) $child->getKey());
     }
 }
